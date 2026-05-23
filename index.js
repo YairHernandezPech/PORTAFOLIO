@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    
+
     // 1. Animación Scroll Reveal (Aparición suave al bajar)
     const revealHandler = () => {
         const reveals = document.querySelectorAll('.reveal');
@@ -43,14 +43,39 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-
-    // 3. Manejo estético del Formulario de Contacto (Evita recarga de página)
+    // Inicializar EmailJS
+    emailjs.init("Drjy5DAgXaBgyIDfZ");
     const contactForm = document.getElementById('contactForm');
     if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
+        contactForm.addEventListener('submit', function (e) {
             e.preventDefault();
-            alert('¡Gracias por tu mensaje! (Este es un demo interactivo, el formulario funciona de manera estética).');
-            this.reset();
+            emailjs.sendForm(
+                "service_o9kibbh",
+                "template_asxuq51",
+                this
+            )
+                .then(() => {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Mensaje enviado ',
+                        text: 'Gracias por contactarme. Te responderé pronto.',
+                        confirmButtonText: 'Perfecto',
+                        background: '#161b22',
+                        color: '#fff'
+                    });
+                    this.reset();
+                })
+                .catch((error) => {
+                    console.error(error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Ups...',
+                        text: 'Ocurrió un error al enviar el mensaje.',
+                        confirmButtonText: 'Intentar de nuevo',
+                        background: '#161b22',
+                        color: '#fff'
+                    });
+                });
         });
     }
 });
